@@ -2,6 +2,7 @@ package tensor;
 import java.math.BigDecimal;
 
 class ScalarImpl implements Scalar{
+
     private BigDecimal value;
 
     public ScalarImpl(String value){
@@ -38,4 +39,5 @@ class ScalarImpl implements Scalar{
     public void multiply(Scalar other){
         this.value = this.value.multiply(new BigDecimal(other.getValue()));
     }
+
 };

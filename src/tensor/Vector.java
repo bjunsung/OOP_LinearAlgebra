@@ -7,7 +7,6 @@ public interface Vector extends Cloneable {
 
     int getSize();
 
-    @Override
     Vector clone();
 
     @Override

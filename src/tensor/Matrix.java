@@ -8,14 +8,25 @@ public interface Matrix extends Cloneable {
     int getRowCount();
     int getColumnCount();
 
-    @Override
     Matrix clone();
 
     @Override
     boolean equals(Object obj);
 
     void add(Matrix other);       // non-static
-    void multiply(Matrix other);  // non-static
+    void multiplyRight(Matrix other);  // non-static
+    void multiplyLeft(Matrix other);  // non-static
+
+    static Matrix concatColumns(Matrix a, Matrix b) {
+        Matrix newMatrix = a.clone();
+        newMatrix.concatColumns(b);
+        return newMatrix;
+    }
+    static Matrix concatRows(Matrix a, Matrix b){
+        Matrix newMatrix = a.clone();
+        newMatrix.concatRows(b);
+        return newMatrix;
+    }
 
     Matrix concatColumns(Matrix other);
     Matrix concatRows(Matrix other);
