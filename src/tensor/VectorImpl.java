@@ -1,6 +1,8 @@
 package tensor;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.security.SecureClassLoader;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,6 +12,10 @@ class VectorImpl implements Vector{
     List<Scalar> elements;
     VectorImpl(){
         elements = new ArrayList<>();
+    }
+
+    VectorImpl(List<Scalar> elements){
+        this.elements = elements;
     }
 
     VectorImpl(int dimension, String value){
@@ -25,7 +31,7 @@ class VectorImpl implements Vector{
         Random random = new Random();
         for(int i = 0; i < dimension; ++i){
             BigDecimal randomValue = minValue.add(
-                    new BigDecimal(Math.random()).multiply(maxValue.subtract(minValue))
+                    BigDecimal.valueOf(Math.random()).multiply(maxValue.subtract(minValue))
             );
             elements.add(new ScalarImpl(randomValue.toString()));
         }
@@ -54,18 +60,22 @@ class VectorImpl implements Vector{
         return elements.size();
     }
 
+    @Override
     public Vector clone() {
-        List<Scalar> newElements = new ArrayList<>();
-        for (Scalar scalar : this.elements) {
-            newElements.add(scalar.clone());
+        try {
+            VectorImpl cloned = (VectorImpl) super.clone();
+            for (int i = 0 ; i < this.getSize(); ++i) {
+                cloned.setElement(i, this.getElement(i).clone());
+            }
+            return cloned;
+        }catch(CloneNotSupportedException e){
+            throw new AssertionError();
         }
-        VectorImpl cloned = new VectorImpl();
-        cloned.elements = newElements;
-        return cloned;
     }
 
+    @Override
     public boolean equals(Object obj){
-        if ( this == obj ) return true;
+        if (super.equals(obj)) return true;
         if ( obj == null || this.getClass() != obj.getClass()) return false;
         VectorImpl other = (VectorImpl) obj;
         if (this.getSize() != other.getSize()) return false;
@@ -84,6 +94,8 @@ class VectorImpl implements Vector{
     }
 
     public void multiply(Scalar other){
+        ScalarImpl one = new ScalarImpl("1.0");
+        if (other.equals(one)) return;
         for (int i = 0; i < this.getSize(); ++i){
             this.getElement(i).multiply(other);
         }
@@ -98,9 +110,7 @@ class VectorImpl implements Vector{
             row.add(value.clone());
             matrixElements.add(row);
         }
-        MatrixImpl columnMatrix = new MatrixImpl();
-        columnMatrix.elements = matrixElements;
-        return columnMatrix;
+        return new MatrixImpl(matrixElements);
     }
 
     //no.31 n-차원 벡터 객체는 자신으로부터 1xn 행렬을 생성하여 반환할 수 있다.
@@ -111,8 +121,29 @@ class VectorImpl implements Vector{
             row.add(scalar.clone());
         }
         matrixElements.add(row);
-        MatrixImpl rowMatrix = new MatrixImpl();
-        rowMatrix.elements = matrixElements;
-        return rowMatrix;
+        return new MatrixImpl(matrixElements);
+    }
+
+    boolean rounding = false;
+
+    public String toString(boolean rounding){
+        this.rounding = rounding;
+        String str = this.toString();
+        rounding = false;
+        return str;
+    }
+
+    @Override
+    public String toString(){
+        String vectorLine = "";
+        for (int i = 0; i < this.getSize(); ++i) {
+            BigDecimal bigdec = new BigDecimal(this.getElement(i).getValue());
+            if (rounding)
+                bigdec = bigdec.setScale(2, RoundingMode.HALF_UP);
+            vectorLine = vectorLine + bigdec.toString();
+            if (i != this.getSize() - 1)
+                 vectorLine = vectorLine + "   ";
+        }
+        return vectorLine;
     }
 }
