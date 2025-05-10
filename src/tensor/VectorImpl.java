@@ -2,14 +2,17 @@ package tensor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.security.SecureClassLoader;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
-import tensor.Vector;
 
 class VectorImpl implements Vector{
     List<Scalar> elements;
+
+    private void checkIndex(int idx){
+        if (idx < 0 || idx >= this.getSize())
+            throw new TensorInvalidIndexException("index out of bounds. dimension of this vector : " + this.getSize() + ", input index : " + idx);
+    }
     VectorImpl(){
         elements = new ArrayList<>();
     }
@@ -25,6 +28,7 @@ class VectorImpl implements Vector{
     }
 
     VectorImpl(int dimension, String min, String max){
+        if (dimension < 0) throw new TensorInvalidDimensionException("dimension must bigger or");
         elements = new ArrayList<>();
         BigDecimal minValue = new BigDecimal(min);
         BigDecimal maxValue = new BigDecimal(max);
@@ -45,14 +49,12 @@ class VectorImpl implements Vector{
     }
 
     public Scalar getElement(int index){
-        if (index < 0 || index >= elements.size())
-            throw new TensorInvalidInputException("Index out of bounds: " + index);
+        checkIndex(index);
         return elements.get(index);
     }
 
     public void setElement(int index, Scalar value){
-        if (index < 0 || index >= elements.size())
-            throw new TensorInvalidInputException("Index out of bounds: " + index);
+        checkIndex(index);
         elements.set(index, value);
     }
 
@@ -124,6 +126,20 @@ class VectorImpl implements Vector{
         return new MatrixImpl(matrixElements);
     }
 
+    public static Vector add(Vector a, Vector b){
+        if (a.getSize() != b.getSize()) {
+            throw new TensorSizeMismatchException("Vectors have different sizes");
+        }
+        Vector newVector = a.clone();
+        newVector.add(b);
+        return newVector;
+    }
+
+    public static Vector multiply(Scalar scalar, Vector vector){
+        VectorImpl newVector = (VectorImpl) vector.clone();
+        newVector.multiply(scalar);
+        return newVector;
+    }
 
     @Override
     public String toString(){

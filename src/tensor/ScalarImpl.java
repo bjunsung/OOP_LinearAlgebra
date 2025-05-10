@@ -11,7 +11,12 @@ class ScalarImpl implements Scalar{
     }
 
     public ScalarImpl(String value){
-        this.value = new BigDecimal(value);
+        try {
+            this.value = new BigDecimal(value);
+        }catch(NumberFormatException e){
+            throw new TensorInvalidInputException(value+ " can not be inverted to BigDecimal");
+        }
+
     }
 
     public String getValue(){
@@ -64,5 +69,19 @@ class ScalarImpl implements Scalar{
         bigdec = bigdec.setScale(2, RoundingMode.HALF_UP);
         return bigdec.toString();
     }
+
+    static Scalar add(Scalar a, Scalar b){
+        ScalarImpl scalar = (ScalarImpl) a.clone();
+        scalar.add(b);
+        return scalar;
+    }
+
+    static Scalar multiply(Scalar a, Scalar b)
+    {
+        ScalarImpl scalar = (ScalarImpl) a.clone();
+        scalar.multiply(b);
+        return scalar;
+    }
+
 
 };

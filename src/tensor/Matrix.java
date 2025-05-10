@@ -2,27 +2,17 @@
 package tensor;
 
 public interface Matrix extends Cloneable {
-    Scalar getElement(int row, int col);
-    void setElement(int row, int col, Scalar value);
+    Scalar getMatrixElement(int row, int col);
+    void setMatrixElement(int row, int col, Scalar value);
 
-    int getRowCount();
-    int getColumnCount();
+    int getMatrixRowCount();
+    int getMatrixColumnCount();
 
     void add(Matrix other);       // non-static
     void multiplyRight(Matrix other);  // non-static
-    void multiplyLeft(Matrix other);  // non-static
+    void multiply(Matrix other);  // non-static
 
     Matrix clone();
-    static Matrix concatColumns(Matrix a, Matrix b) {
-        Matrix newMatrix = a.clone();
-        newMatrix.concatColumns(b);
-        return newMatrix;
-    }
-    static Matrix concatRows(Matrix a, Matrix b){
-        Matrix newMatrix = a.clone();
-        newMatrix.concatRows(b);
-        return newMatrix;
-    }
 
     void concatColumns(Matrix other);
     void concatRows(Matrix other);
