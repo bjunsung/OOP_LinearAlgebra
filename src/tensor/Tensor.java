@@ -42,8 +42,8 @@ public class Tensor {
             throw new TensorInvalidInputException("invalid matrix size");
         }
         Matrix newMatrix = a.clone();
-        for(int i = 0; i < newMatrix.getRowCount(); i++){
-            for(int j = 0; j < newMatrix.getColumnCount(); j++){
+        for(int i = 0; i < newMatrix.getRowCount(); ++i){
+            for(int j = 0; j < newMatrix.getColumnCount(); ++j){
                 newMatrix.getElement(i,j).add(b.getElement(i,j));
             }
         }
@@ -60,5 +60,20 @@ public class Tensor {
         newMatrix.multiplyRight(b);
         return newMatrix;
     }
+
+    //no.32 전달받은 두 행렬의 가로 합(concat columns)
+    public static Matrix concatColumns(Matrix a, Matrix b) {
+        Matrix concated = a.clone();
+        concated.concatColumns(b);
+        return concated;
+    }
+
+    //no.33 전달받은 두 행렬의 세로 합(concat rows)
+    public static Matrix concatRows(Matrix a, Matrix b) {
+        Matrix concated = a.clone();
+        concated.concatRows(b);
+        return concated;
+    }
+
 
 }

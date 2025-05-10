@@ -270,9 +270,9 @@ class MatrixImpl implements Matrix {
         checkIndices(startRow, startCol);
         checkIndices(endRow, endCol);
         List<List<Scalar>> subMatrixElements = new ArrayList<>();
-        for (int i = startRow; i < endRow; ++i) {
+        for (int i = startRow; i <= endRow; ++i) {
             List<Scalar> row = new ArrayList<>();
-            for (int j = startCol; j < endCol; ++j) {
+            for (int j = startCol; j <= endCol; ++j) {
                 row.add(this.getElement(i, j).clone());
             }
             subMatrixElements.add(row);
@@ -346,11 +346,15 @@ class MatrixImpl implements Matrix {
 
     //no.43. 행렬은 자신이 단위행렬인지 여부를 판별해 줄 수 있다.
     public boolean isIdentityMatrix() {
+        BigDecimal epsilon = new BigDecimal("0.00000001");
+        BigDecimal diff;
         if (!this.isSquare()) return false;
         for (int i = 0; i < this.getRowCount(); ++i)
             for (int j = 0; j < this.getColumnCount(); ++j) {
-                if ((i != j) && !this.getElement(i, j).equals(zero)) return false;
-                if ((i == j) && !this.getElement(i, j).equals(one)) return false;
+                diff = new BigDecimal(this.getElement(i, j).getValue()).abs();
+                if ((i != j) && diff.compareTo(epsilon) > 0) return false;
+                diff = diff.add(new BigDecimal("-1.0")).abs();
+                if ((i == j) && diff.compareTo(epsilon) > 0) return false;
             }
         return true;
     }
@@ -458,7 +462,7 @@ class MatrixImpl implements Matrix {
             // 2. 선행 원소를 1로 만들기
             Scalar pivot = rrefMatrix.getElement(row, lead);
             Scalar reciprocal;
-            reciprocal = new ScalarImpl(new BigDecimal("1.0").divide(new BigDecimal(pivot.getValue()), BigDecimal.ROUND_HALF_UP).toString());
+            reciprocal = new ScalarImpl(new BigDecimal("1.0").divide(new BigDecimal(pivot.getValue()), 10, BigDecimal.ROUND_HALF_UP).toString());
             rrefMatrix.scaleRow(row, reciprocal);
             // 3. 현재 열의 다른 행에 대해 0 만들기
             for (int i = 0; i < rowCount; i++) {
@@ -466,6 +470,17 @@ class MatrixImpl implements Matrix {
                     Scalar factor = rrefMatrix.getElement(i, lead).clone();
                     factor.multiply(new ScalarImpl("-1.0"));
                     rrefMatrix.addScaledRow(i, row, factor);
+
+                }
+            }
+            // 4. 오차 허용
+            BigDecimal epsilon = new BigDecimal("0.00000001");
+            for (int i = 0; i < rowCount; i++) {
+                for (int j = 0; j < colCount; j++) {
+                    BigDecimal diff = new BigDecimal(rrefMatrix.getElement(i, j).getValue()).abs();
+                    if (diff.compareTo(epsilon) < 0) {
+                        rrefMatrix.setElement(i, j, zero);
+                    }
                 }
             }
             lead++;
@@ -477,8 +492,6 @@ class MatrixImpl implements Matrix {
     public boolean isRref() {
         if (this.getRowCount() == 0 || this.getColumnCount() == 0) return true;
         int lead = -1;  // 선행 원소의 열 위치 추적
-        Scalar one = new ScalarImpl("1.0");
-        Scalar zero = new ScalarImpl("0.0");
         for (int i = 0; i < this.getRowCount(); ++i) {
             int rowLead = -1;
             // 1. 이 행의 선행 원소 찾기
@@ -488,12 +501,12 @@ class MatrixImpl implements Matrix {
                     break;
                 }
             }
-            // 2. 전부 0인 행이면, 그 아래는 모두 0이어야 함
+            // 2. 전부 0인 행이면, 그 아래는 모두 0.
             if (rowLead == -1) {
                 for (int k = i + 1; k < this.getRowCount(); ++k) {
                     for (int j = 0; j < this.getColumnCount(); ++j) {
                         if (!this.getElement(k, j).equals(zero)) {
-                            return false; // 0행 아래에 0이 아닌 값 발견 → RREF 아님
+                            return false; // 0행 아래에 0이 아닌 값 발견 -> not RREF
                         }
                     }
                 }
@@ -581,9 +594,7 @@ class MatrixImpl implements Matrix {
             }
             // 2. pivot을 1로 만들기
             Scalar pivot = rrefMatrix.getElement(row, lead).clone();
-            Scalar reciprocal = new ScalarImpl(
-                    new BigDecimal("1.0").divide(new BigDecimal(pivot.getValue()), BigDecimal.ROUND_HALF_UP).toString()
-            );
+            Scalar reciprocal = new ScalarImpl(new BigDecimal("1.0").divide(new BigDecimal(pivot.getValue()), 10, BigDecimal.ROUND_HALF_UP).toString());
             rrefMatrix.scaleRow(row, reciprocal);
             inverseMatrix.scaleRow(row, reciprocal);
             // 3. pivot 열의 다른 행을 0으로 만들기
@@ -593,6 +604,16 @@ class MatrixImpl implements Matrix {
                 factor.multiply(new ScalarImpl("-1.0"));
                 rrefMatrix.addScaledRow(i, row, factor);
                 inverseMatrix.addScaledRow(i, row, factor);
+            }
+            //오차 허용
+            BigDecimal epsilon = new BigDecimal("0.00000001");
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    BigDecimal diff = new BigDecimal(rrefMatrix.getElement(i, j).getValue()).abs();
+                    if (diff.compareTo(epsilon) < 0) {
+                        rrefMatrix.setElement(i, j, zero);
+                    }
+                }
             }
             lead++;
         }

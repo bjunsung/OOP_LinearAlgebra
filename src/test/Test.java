@@ -85,20 +85,20 @@ public class Test {
         //no.10 | 단위행렬을 생성할 수 있다.
         System.out.println("no.10 | 단위행렬을 생성할 수 있다.");
         matrix = Factory.createIdentityMatrix(3);
-        System.out.println(indent+"identity matrix of size 3 =");
+        System.out.println(indent+"3x3 dimension identity matrix =");
         System.out.println(matrix.toString(indentForMatrix));
         System.out.println();
 
         //no.11v | 특정 위치의 요소를 지정/조회할 수 있다.
         System.out.println("no.11v | 특정 위치의 요소를 지정/조회할 수 있다. (벡터)");
         vector = Factory.createRandomVector(5, "-5.0", "5.0");
-        System.out.println(indent+"String value of 2nd element of 5-size Random vector = " + vector.getElement(2).toString(true));
+        System.out.println(indent+"String value of 2nd element of 5-dimension Random vector = " + vector.getElement(2).toString(true));
         System.out.println();
 
         //no.11m | 특정 위치의 요소를 지정/조회할 수 있다.
         System.out.println("no.11m | 특정 위치의 요소를 지정/조회할 수 있다. (행렬)");
         matrix = Factory.createRandomMatrix(2, 2, "-5.0", "5.0");
-        System.out.println(indent+"String value of (0, 1) element of 2x2 random value matrix : " + matrix.getElement(0, 1).toString(true));
+        System.out.println(indent+"String value of (0, 1) element of 2x2 dimension random value matrix : " + matrix.getElement(0, 1).toString(true));
         System.out.println();
 
         //no.12 | Scalar 값을 지정/조회 할 수 있다.
@@ -129,13 +129,13 @@ public class Test {
         //no.14v | 객체를 콘솔에 출력할 수 있다. (벡터)
         System.out.println("no.14v | 객체를 콘솔에 출력할 수 있다. (벡터)");
         vector = Factory.createRandomVector(5, "-5.0", "5.0");
-        System.out.println(indent + "print String value of 5-size random Vector : " + vector.toString(true));
+        System.out.println(indent + "print String value of 5-dimension random Vector : " + vector.toString(true));
         System.out.println();
 
         //no.14m | 객체를 콘솔에 출력할 수 있다. (행렬)
         System.out.println("no.14m | 객체를 콘솔에 출력할 수 있다. (행렬)");
         matrix = Factory.createRandomMatrix(3, 5, "0.0", "100.0");
-        System.out.println(indent + "print 3x5 size random matrix");
+        System.out.println(indent + "print 3x5 dimension random matrix");
         System.out.println(matrix.toString(indentForMatrix));
         System.out.println();
 
@@ -260,19 +260,21 @@ public class Test {
 
         //no.24 | 전달받은 두 스칼라의 덧셈이 가능하다.
         System.out.println("no.24 | 전달받은 두 스칼라의 덧셈이 가능하다.");
-        System.out.printf(indent+"(static method) add operation of two given scalars : scalar1(%.2f) + scalar2(%.2f) : %.2f\n",
+        System.out.printf("(static method) add operation of two given scalars : scalar1(%.2f) + scalar2(%.2f) : %.2f\n",
                 Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar2.getValue()), Double.parseDouble(Tensor.add(scalar1, scalar2).getValue()));
         System.out.println();
 
         //no.25 | 전달받은 두 스칼라의 곱셈이 가능하다.
         System.out.println("no.25 | 전달받은 두 스칼라의 곱셈이 가능하다.");
-        System.out.printf(indent+"(static method) multiply operation of two given scalars : scalar1(%.2f) x scalar2(%.2f) : %.2f\n",
+        System.out.printf("(static method) multiply operation of two given scalars : scalar1(%.2f) x scalar2(%.2f) : %.2f\n",
                 Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar2.getValue()), Double.parseDouble(Tensor.multiply(scalar1, scalar2).getValue()));
         System.out.println();
 
         //no.26 | 전달받은 두 벡터의 덧셈이 가능하다.
         System.out.println("no.26 | 전달받은 두 벡터의 덧셈이 가능하다.");
-        System.out.println(indent+"(static method) add operation of two given vectors : vector1 + vector2");
+        System.out.println("(static method) add operation of two given vectors : vector1 + vector2");
+        vector1 = Factory.createVector(5, "1.0");
+        vector2 = Factory.createVector(5, "-1.0");
         System.out.print(indent+"vector1 \t\t  = ");
         System.out.println(vector1.toString(true));
         System.out.print(indent+"vector2 \t\t  = ");
@@ -280,6 +282,325 @@ public class Test {
         System.out.print(indent+"vector1 + vector2 = ");
         System.out.println(Tensor.add(vector1, vector2).toString(true));
         System.out.println();
+
+        //no.27 | 전달받은 두 스칼라와 벡터의 곱셈이 가능하다.
+        System.out.println("no.27 | 전달받은 두 스칼라와 벡터의 곱셈이 가능하다.");
+        System.out.println("(static method) multiply operation of given scalar & vector : scalar x vector");
+        vector = Factory.createVector(5, "1.0");
+        scalar = Factory.createScalar("-1.0");
+        System.out.println(indent + "vector = \t\t\t" + vector.toString(true));
+        System.out.println(indent + "scalar = \t\t\t" + scalar.toString(true));
+        System.out.println(indent + "multiply scalar to vector");
+        System.out.println(indent + "scalar x vector = \t" + Tensor.multiply(scalar, vector).toString(true));
+        System.out.println();
+
+
+        //no.28 | 전달받은 같은 크기의 두 행렬 덧셈이 가능하다.
+        System.out.println("no.28 | 전달받은 같은 크기의 두 행렬 덧셈이 가능하다.");
+        System.out.println("(static method) add operation of two given equal dimension matrix : matrix1 + matrix2");
+        matrix1 = Factory.createMatrix(2, 2, "1.0");
+        matrix2 = Factory.createIdentityMatrix(2);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "add matrix2 to matrix1 (matrix1 + matrix2) =\n" + Tensor.add(matrix1, matrix2).toString(indentForMatrix));
+        System.out.println();
+
+        //no.29 | 전달받은 두 행렬의 곱셈이 가능하다. (mxn)x(nxl)
+        System.out.println("no.29 | 전달받은 두 행렬의 곱셈이 가능하다. (mxn)x(nxl)");
+        System.out.println("(static method) add operation of two given matrix : matrix1 x matrix2 (mxn)x(nxl)");
+        String[][] array1 = {{"1.0", "2.0", "3.0"}, {"-1.0", "-2.0", "-3.0"}};
+        String[][] array2 = {{"1.0", "1.2"}, {"1.4", "1.6"}, {"1.8", "2.0"}};
+        matrix1 = Factory.createMatrixFromArray(array1);
+        matrix2 = Factory.createMatrixFromArray(array2);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "multiply matrix2 to matrix1 (matrix1 x matrix2) =\n" + Tensor.multiply(matrix1, matrix2).toString(indentForMatrix));
+
+        //no.30 | n-차원 벡터 객체는 자신으로부터 nx1 행렬을 생성하여 반환할 수 있다.
+        System.out.println("no.30 | n-차원 벡터 객체는 자신으로부터 nx1 행렬을 생성하여 반환할 수 있다.");
+        array = new String[]{"1.0", "2.0", "3.0", "4.0", "5.0"};
+        vector = Factory.createVectorFromArray(array);
+        System.out.println(indent + "vector = " + vector.toString(true));
+        System.out.println(indent + "vector to nx1 matrix");
+        matrix = vector.toColumnMatrix();
+        System.out.println(matrix.toString(indentForMatrix));
+        System.out.println();
+
+        //no.31 | n-차원 벡터 객체는 자신으로부터 1xn 행렬을 생성하여 반환할 수 있다.
+        System.out.println("no.31 | n-차원 벡터 객체는 자신으로부터 1xn 행렬을 생성하여 반환할 수 있다.");
+        array = new String[]{"1.0", "2.0", "3.0", "4.0", "5.0"};
+        vector = Factory.createVectorFromArray(array);
+        System.out.println(indent + "vector = " + vector.toString(true));
+        System.out.println(indent + "vector to 1xn matrix");
+        matrix = vector.toRowMatrix();
+        System.out.println(matrix.toString(indentForMatrix));
+        System.out.println();
+
+        //no.32 | 행렬은 다른 행렬과 가로로 합쳐질 수 있다.
+        System.out.println("no.32 | 행렬은 다른 행렬과 가로로 합쳐질 수 있다.");
+        System.out.println("(static method) concat operation of two given matrix : matrix1, matrix2 (kxm) concat (kxn)");
+        matrix1 = Factory.createMatrix(3, 2, "1.0");
+        matrix2 = Factory.createMatrix(3, 1, "2.0");
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "(concat-rows) matrix1, matrix2\n" + Tensor.concatColumns(matrix1, matrix2).toString(indentForMatrix));
+        System.out.println();
+
+        //no.33 | 행렬은 다른 행렬과 세로로 합쳐질 수 있다.
+        System.out.println("no.33 | 행렬은 다른 행렬과 세로로 합쳐질 수 있다.");
+        System.out.println("(static method) concat operation of two given matrix : matrix1, matrix2 (mxk) concat (nxk)");
+        matrix1 = Factory.createMatrix(2, 3, "1.0");
+        matrix2 = Factory.createMatrix(1, 3, "2.0");
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "(concat-columns) matrix1, matrix2\n" + Tensor.concatRows(matrix1, matrix2).toString(indentForMatrix));
+        System.out.println();
+
+        //no.34 | 행렬은 특정 행을 벡터 형태로 추출해 줄 수 있다.
+        System.out.println("no.34 | 행렬은 특정 행을 벡터 형태로 추출해 줄 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        System.out.println(indent + "get 2nd row vector from matrix");
+        vector = matrix.extractRow(1);
+        System.out.println(indent + "vector = " + vector.toString(true));
+        System.out.println();
+
+        //no.35 | 행렬은 특정 열을 벡터 형태로 추출해 줄 수 있다.
+        System.out.println("no.35 | 행렬은 특정 열을 벡터 형태로 추출해 줄 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        System.out.println(indent + "get 2nd column vector from matrix");
+        vector = matrix.extractColumn(1);
+        System.out.println(indent + "vector = " + vector.toString(true));
+        System.out.println();
+
+        //no.36 | 행렬은 특정 범위의 부분 행렬을 추출해 줄 수 있다.
+        System.out.println("no.36 | 행렬은 특정 범위의 부분 행렬을 추출해 줄 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        System.out.println(indent + "get 2x1(The fartest bottom right of matrix) submatrix from matrix");
+        Matrix submatrix = matrix.subMatrix(1, 2, 2, 2);
+        System.out.println(indent + "submatrix =\n" + submatrix.toString(indentForMatrix));
+        System.out.println();
+
+        //no.37 | 행렬은 특정 범위의 minor 행렬을 추출 해 줄 수 있다.
+        System.out.println("no.37 | 행렬은 특정 범위의 minor 행렬을 추출 해 줄 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        System.out.println(indent + "get minor(1,1) matrix from matrix");
+        Matrix minorMatrix = matrix.minor(1, 1);
+        System.out.println(indent + "minor matrix =\n" + minorMatrix.toString(indentForMatrix));
+        System.out.println();
+
+        //no.38 | 행렬은 전치행렬을 구해줄 수 있다.
+        System.out.println("no.38 | 행렬은 전치행렬을 구해줄 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        Matrix transpose = matrix.transpose();
+        System.out.println(indent + "transpose matrix =\n" + transpose.toString(indentForMatrix));
+        System.out.println();
+
+        //no.39 | 행렬은 대각 요소의 합을 구해줄 수 있다.
+        System.out.println("no.39 | 행렬은 대각 요소의 합을 구해줄 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        System.out.println(indent + "trace(matrix) = " + matrix.trace());
+        System.out.println();
+
+        //no.40 | 행렬은 자신이 정사각 행렬인지 여부를 판별해 줄 수 있다.
+        System.out.println("no.40 | 행렬은 자신이 정사각 행렬인지 여부를 판별해 줄 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}};
+        String[][] array2dother = new String[][]{{"1.0", "2.0"}, {"3.0", "4.0"}};
+        matrix1 = Factory.createMatrixFromArray(array2d);
+        matrix2 = Factory.createMatrixFromArray(array2dother);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix1 is square matrix : " + matrix1.isSquare());
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 is square matrix : " + matrix2.isSquare());
+        System.out.println();
+
+        //no.41 | 행렬은 자신이 상삼각 행렬인지 여부를 판별해 줄 수 있다.
+        System.out.println("no.41 | 행렬은 자신이 상삼각 행렬인지 여부를 판별해 줄 수 있다.");
+        array2d = new String[][]{{"1.11", "2.22", "3.33"}, {"0.0", "5.55", "6.66"}, {"0.0", "0.0", "9.99"}};
+        array2dother = new String[][]{{"1.11", "0.0", "0.0"}, {"4.44", "5.55", "0.0"}, {"7.77", "8.88", "9.99"}};
+        matrix1 = Factory.createMatrixFromArray(array2d);
+        matrix2 = Factory.createMatrixFromArray(array2dother);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix1 is upper triangular matrix : " + matrix1.isUpperTriangular());
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 is upper triangular matrix : " + matrix2.isUpperTriangular());
+        System.out.println();
+
+        //no.42 | 행렬은 자신이 하삼각 행렬인지 여부를 판별해 줄 수 있다.
+        System.out.println("no.42 | 행렬은 자신이 하삼각 행렬인지 여부를 판별해 줄 수 있다.");
+        array2d = new String[][]{{"1.11", "2.22", "3.33"}, {"0.0", "5.55", "6.66"}, {"0.0", "0.0", "9.99"}};
+        array2dother = new String[][]{{"1.11", "0.0", "0.0"}, {"4.44", "5.55", "0.0"}, {"7.77", "8.88", "9.99"}};
+        matrix1 = Factory.createMatrixFromArray(array2d);
+        matrix2 = Factory.createMatrixFromArray(array2dother);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix1 is lower triangular matrix : " + matrix1.isLowerTriangular());
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 is lower triangular matrix : " + matrix2.isLowerTriangular());
+        System.out.println();
+
+        //no.43 | 행렬은 자신이 단위 행렬인지 여부를 판별해 줄 수 있다.
+        System.out.println("no.43 | 행렬은 자신이 단위 행렬인지 여부를 판별해 줄 수 있다.");
+        array2d = new String[][]{{"1.0", "0.0", "0.0"}, {"0.0", "1.0", "0.0"}, {"0.0", "0.0", "1.0"}};
+        array2dother = new String[][]{{"99.9", "0.0", "0.0"}, {"0.0", "1.0", "0.0"}, {"0.0", "0.0", "1.0"}};
+        matrix1 = Factory.createMatrixFromArray(array2d);
+        matrix2 = Factory.createMatrixFromArray(array2dother);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix1 is identity matrix : " + matrix1.isIdentityMatrix());
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 is identity matrix : " + matrix2.isIdentityMatrix());
+        System.out.println();
+
+        //no.44 | 행렬은 자신이 영 행렬인지 여부를 판별해 줄 수 있다.
+        System.out.println("no.44 | 행렬은 자신이 영 행렬인지 여부를 판별해 줄 수 있다.");
+        array2d = new String[][]{{"0.0", "0.0", "0.0"}, {"0.0", "0.0", "0.0"}, {"0.0", "0.0", "0.0"}};
+        array2dother = new String[][]{{"99.9", "0.0", "0.0"}, {"0.0", "0.0", "0.0"}, {"0.0", "0.0", "0.0"}};
+        matrix1 = Factory.createMatrixFromArray(array2d);
+        matrix2 = Factory.createMatrixFromArray(array2dother);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix1 is zero matrix : " + matrix1.isZeroMatrix());
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 is zero matrix : " + matrix2.isZeroMatrix());
+        System.out.println();
+
+        //no.45 | 행렬은 특정 두 행의 위치를 맞교환할 수 있다.
+        System.out.println("no.45 | 행렬은 특정 두 행의 위치를 맞교환할 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        System.out.println(indent + "swap 2nd row and 3rd row");
+        matrix.swapRows(1, 2);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+
+        //no.46 | 행렬은 특정 두 열의 위치를 맞교환할 수 있다.
+        System.out.println("no.45 | 행렬은 특정 두 열의 위치를 맞교환할 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        System.out.println(indent + "swap 2nd column and 3rd column");
+        matrix.swapColumns(1, 2);
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+
+        //no.47 | 행렬은 특정 행에 스칼라배 할 수 있다.
+        System.out.println("no.47 | 행렬은 특정 행에 스칼라배 할 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        scalar = Factory.createScalar("-1.0");
+        System.out.println(indent + "value of scalar = " + scalar.toString());
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        matrix.scaleRow(1, scalar);
+        System.out.println(indent + "scale(-1) on 2nd row of matrix =\n" + matrix.toString(indentForMatrix));
+
+        //no.48 | 행렬은 특정 열에 스칼라배 할 수 있다.
+        System.out.println("no.48 | 행렬은 특정 열에 스칼라배 할 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        scalar = Factory.createScalar("-1.0");
+        System.out.println(indent + "value of scalar = " + scalar.toString());
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        matrix.scaleColumn(1, scalar);
+        System.out.println(indent + "scale(-1) on 2nd column of matrix =\n" + matrix.toString(indentForMatrix));
+
+        //no.49 | 행렬은 특정 행에 다른 행의 상수배를 더할 수 있다.
+        System.out.println("no.49 | 행렬은 특정 행에 다른 행의 상수배를 더할 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        scalar = Factory.createScalar("-1.0");
+        System.out.println(indent + "value of scalar = " + scalar.toString());
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        matrix.addScaledRow(0, 1, scalar);
+        System.out.println(indent + "add scaled 2nd row to 1st row. R1 + (-1)R2");
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        System.out.println();
+
+        //no.50 | 행렬은 특정 열에 다른 열의 상수배를 더할 수 있다.
+        System.out.println("no.50 | 행렬은 특정 열에 다른 열의 상수배를 더할 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix = Factory.createMatrixFromArray(array2d);
+        scalar = Factory.createScalar("-1.0");
+        System.out.println(indent + "value of scalar = " + scalar.toString());
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        matrix.addScaledColumn(0, 1, scalar);
+        System.out.println(indent + "add scaled 2nd column to 1st column. C1 + (-1)C2");
+        System.out.println(indent + "matrix =\n" + matrix.toString(indentForMatrix));
+        System.out.println();
+
+        //no.51 | 행렬은 자신으로부터 RREF 행렬을 구해서 반환해줄 수 있다.
+        System.out.println("no.51 | 행렬은 자신으로부터 RREF 행렬을 구해서 반환해줄 수 있다.");
+        array2d = new String[][]{{"2.0", "0.0", "1.0"}, {"3.0", "4.0", "5.0"}, {"1.0", "0.0", "1.0"}};
+        array2dother = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix1 = Factory.createMatrixFromArray(array2d);
+        matrix2 = Factory.createMatrixFromArray(array2dother);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        Matrix rref1 = matrix1.toRref();
+        System.out.println(indent + "RREF(Reduced Row Echelon Form) of matrix1 =\n" + rref1.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        Matrix rref2 = matrix2.toRref();
+        System.out.println(indent + "RREF(Reduced Row Echelon Form) of matrix2 =\n" + rref2.toString(indentForMatrix));
+        System.out.println();
+
+        //no.52 | 행렬은 자신이 RREF 행렬인지 여부를 판별해 줄 수 있다.
+        System.out.println("no.52 | 행렬은 자신이 RREF 행렬인지 여부를 판별해 줄 수 있다.");
+        array2d = new String[][]{{"1.0", "0.0", "0.0"}, {"0.0", "1.0", "1.0"}, {"0.0", "0.0", "0.0"}};
+        array2dother =new String[][]{{"0.0", "1.0", "0.0"}, {"1.0", "0.0", "0.0"}, {"0.0", "0.0", "1.0"}};
+        matrix1 = Factory.createMatrixFromArray(array2d);
+        matrix2 = Factory.createMatrixFromArray(array2dother);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "matrix1 is RREF(Reduced Row Echelon Form) : " + matrix1.isRref());
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "matrix2 is RREF(Reduced Row Echelon Form) : " + matrix2.isRref());
+        System.out.println();
+
+        //no.53 | 행렬은 자신의 행렬식을 구해줄 수 있다.
+        System.out.println("no.53 | 행렬은 자신의 행렬식을 구해줄 수 있다.");
+        array2d = new String[][]{{"1.0", "2.0"}, {"3.0", "4.0"}};
+        matrix1 = Factory.createMatrixFromArray(array2d);
+        array2dother = new String[][]{{"1.0", "2.0", "3.0"}, {"4.0", "5.0", "6.0"}, {"7.0", "8.0", "9.0"}};
+        matrix2 = Factory.createMatrixFromArray(array2dother);
+        array2d = new String[][]{{"1.0", "2.0", "3.0", "4.0"}, {"2.0", "1.0", "5.0", "6.0"}, {"3.0", "0.0", "1.0", "7.0"}, {"4.0", "2.0", "6.0", "5.0"}};
+        matrix3 = Factory.createMatrixFromArray(array2d);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        System.out.println(indent + "det(matrix1) = " + matrix1.determinant().toString(true));
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        System.out.println(indent + "det(matrix2) = " + matrix2.determinant().toString(true));
+        System.out.println(indent + "matrix3 =\n" + matrix3.toString(indentForMatrix));
+        System.out.println(indent + "det(matrix3) = " + matrix3.determinant().toString(true));
+        System.out.println();
+
+        //no.54  | 행렬은 자신의 역행렬을 구해줄 수 있다.
+        System.out.println("no.54 | 행렬은 자신의 역행렬을 구해줄 수 있다.");
+        array2d = new String[][]{{"2.0", "1.0", "3.0"}, {"1.0", "0.0", "1.0"}, {"0.0", "1.0", "2.0"}};
+        matrix1 = Factory.createMatrixFromArray(array2d);
+        array2dother = new String[][]{{"1.0", "1.0", "1.0"}, {"2.0", "2.0", "2.0"}, {"3.0", "4.0", "5.0"}};
+        matrix2 = Factory.createMatrixFromArray(array2dother);
+        System.out.println(indent + "matrix1 =\n" + matrix1.toString(indentForMatrix));
+        try{
+        System.out.println(indent + "inverse matrix of matrix1 =\n" + matrix1.inverse().toString(indentForMatrix));
+        }catch(NonSquareMatrixException e){
+            System.out.println(e.getMessage());
+        }
+        catch(TensorArithmeticException e){
+            System.out.println(e.getMessage());
+        }
+        System.out.println(indent + "matrix2 =\n" + matrix2.toString(indentForMatrix));
+        try{
+            System.out.println(indent + "inverse matrix of matrix2 =\n" + matrix2.inverse().toString(indentForMatrix));
+        }catch(NonSquareMatrixException e){
+            System.out.println(e.getMessage());
+        }
+        catch(TensorArithmeticException e){
+            System.out.println(e.getMessage());
+        }
 
     }
 }
