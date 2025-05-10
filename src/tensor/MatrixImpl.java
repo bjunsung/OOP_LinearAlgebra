@@ -623,17 +623,10 @@ class MatrixImpl implements Matrix {
         return inverseMatrix;
     }
 
-    String indent = "";
-
-    public String toString(String indent){
-        this.indent = indent;
-        String matrixString = this.toString();
-        indent = "";
-        return matrixString;
-    }
 
     @Override
     public String toString(){
+        String indent = "\t\t\t\t\t\t";
         StringBuilder matrixString = new StringBuilder();
         for (int i=0; i < this.getRowCount(); ++i) {
             matrixString.append(indent);

@@ -23,6 +23,5 @@ public interface Scalar extends Comparable<Scalar>, Cloneable {
     void add(Scalar other);
     void add(BigDecimal other);
     void multiply(Scalar other);
-    String toString(boolean rounding);
 
 }

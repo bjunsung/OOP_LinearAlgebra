@@ -26,6 +26,4 @@ public interface Vector extends Cloneable {
 
     Matrix toColumnMatrix();
     Matrix toRowMatrix();
-
-    String toString(boolean rounding);
 }

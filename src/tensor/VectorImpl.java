@@ -124,22 +124,13 @@ class VectorImpl implements Vector{
         return new MatrixImpl(matrixElements);
     }
 
-    boolean rounding = false;
-
-    public String toString(boolean rounding){
-        this.rounding = rounding;
-        String str = this.toString();
-        rounding = false;
-        return str;
-    }
 
     @Override
     public String toString(){
         String vectorLine = "";
         for (int i = 0; i < this.getSize(); ++i) {
             BigDecimal bigdec = new BigDecimal(this.getElement(i).getValue());
-            if (rounding)
-                bigdec = bigdec.setScale(2, RoundingMode.HALF_UP);
+            bigdec = bigdec.setScale(2, RoundingMode.HALF_UP);
             vectorLine = vectorLine + bigdec.toString();
             if (i != this.getSize() - 1)
                  vectorLine = vectorLine + "   ";

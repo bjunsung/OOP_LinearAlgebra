@@ -57,20 +57,11 @@ class ScalarImpl implements Scalar{
         this.value = this.value.multiply(new BigDecimal(other.getValue()));
     }
 
-    public String toString(boolean rounding){
-        this.rounding = rounding;
-        String str = this.toString();
-        rounding = false;
-        return str;
-    }
-
-    boolean rounding = false;
 
     @Override
     public String toString(){
         BigDecimal bigdec = new BigDecimal(this.value.toString());
-        if (rounding)
-            bigdec = bigdec.setScale(2, RoundingMode.HALF_UP);
+        bigdec = bigdec.setScale(2, RoundingMode.HALF_UP);
         return bigdec.toString();
     }
 

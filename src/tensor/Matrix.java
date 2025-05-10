@@ -13,7 +13,6 @@ public interface Matrix extends Cloneable {
     void multiplyLeft(Matrix other);  // non-static
 
     Matrix clone();
-    String toString(String indent);
     static Matrix concatColumns(Matrix a, Matrix b) {
         Matrix newMatrix = a.clone();
         newMatrix.concatColumns(b);
