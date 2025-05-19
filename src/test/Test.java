@@ -86,7 +86,7 @@ public class Test {
         //no.11v | 특정 위치의 요소를 지정/조회할 수 있다.
         System.out.println("no.11v | 특정 위치의 요소를 지정/조회할 수 있다. (벡터)");
         vector = Factory.createRandomVector(5, "-5.0", "5.0");
-        System.out.println(indent+"String value of 2nd element of 5-dimension Random vector = " + vector.getElement(2));
+        System.out.println(indent+"String value of 2nd element of 5-dimension Random vector = " + vector.getVectorElement(2));
         System.out.println();
 
         //no.11m | 특정 위치의 요소를 지정/조회할 수 있다.
@@ -104,7 +104,7 @@ public class Test {
         //no.13v | 벡터의 크기 정보를 조회할 수 있다.
         System.out.println("no.13v | 벡터의 크기 정보를 조회할 수 있다.");
         vector = Factory.createRandomVector(5, "-5.0", "5.0");
-        System.out.println(indent+"size of vector = " + vector.getSize());
+        System.out.println(indent+"size of vector = " + vector.getVectorSize());
         System.out.println();
 
         //no.13m | 행렬의 크기 정보를 조회할 수 있다.
@@ -255,13 +255,13 @@ public class Test {
         //no.24 | 전달받은 두 스칼라의 덧셈이 가능하다.
         System.out.println("no.24 | 전달받은 두 스칼라의 덧셈이 가능하다.");
         System.out.printf("(static method) add operation of two given scalars : scalar1(%.2f) + scalar2(%.2f) : %.2f\n",
-                Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar2.getValue()), Double.parseDouble(Tensor.add(scalar1, scalar2).getValue()));
+                Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar2.getValue()), Double.parseDouble(Tensors.add(scalar1, scalar2).getValue()));
         System.out.println();
 
         //no.25 | 전달받은 두 스칼라의 곱셈이 가능하다.
         System.out.println("no.25 | 전달받은 두 스칼라의 곱셈이 가능하다.");
         System.out.printf("(static method) multiply operation of two given scalars : scalar1(%.2f) x scalar2(%.2f) : %.2f\n",
-                Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar2.getValue()), Double.parseDouble(Tensor.multiply(scalar1, scalar2).getValue()));
+                Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar2.getValue()), Double.parseDouble(Tensors.multiply(scalar1, scalar2).getValue()));
         System.out.println();
 
         //no.26 | 전달받은 두 벡터의 덧셈이 가능하다.
@@ -274,7 +274,7 @@ public class Test {
         System.out.print(indent+"vector2 \t\t  = ");
         System.out.println(vector2);
         System.out.print(indent+"vector1 + vector2 = ");
-        System.out.println(Tensor.add(vector1, vector2));
+        System.out.println(Tensors.add(vector1, vector2));
         System.out.println();
 
         //no.27 | 전달받은 두 스칼라와 벡터의 곱셈이 가능하다.
@@ -285,7 +285,7 @@ public class Test {
         System.out.println(indent + "vector = \t\t\t" + vector);
         System.out.println(indent + "scalar = \t\t\t" + scalar);
         System.out.println(indent + "multiply scalar to vector");
-        System.out.println(indent + "scalar x vector = \t" + Tensor.multiply(scalar, vector));
+        System.out.println(indent + "scalar x vector = \t" + Tensors.multiply(scalar, vector));
         System.out.println();
 
 
@@ -296,7 +296,7 @@ public class Test {
         matrix2 = Factory.createIdentityMatrix(2);
         System.out.println(indent + "matrix1 =\n" + matrix1);
         System.out.println(indent + "matrix2 =\n" + matrix2);
-        System.out.println(indent + "add matrix2 to matrix1 (matrix1 + matrix2) =\n" + Tensor.add(matrix1, matrix2));
+        System.out.println(indent + "add matrix2 to matrix1 (matrix1 + matrix2) =\n" + Tensors.add(matrix1, matrix2));
         System.out.println();
 
         //no.29 | 전달받은 두 행렬의 곱셈이 가능하다. (mxn)x(nxl)
@@ -308,7 +308,7 @@ public class Test {
         matrix2 = Factory.createMatrixFromArray(array2);
         System.out.println(indent + "matrix1 =\n" + matrix1);
         System.out.println(indent + "matrix2 =\n" + matrix2);
-        System.out.println(indent + "multiply matrix2 to matrix1 (matrix1 x matrix2) =\n" + Tensor.multiply(matrix1, matrix2));
+        System.out.println(indent + "multiply matrix2 to matrix1 (matrix1 x matrix2) =\n" + Tensors.multiply(matrix1, matrix2));
 
         //no.30 | n-차원 벡터 객체는 자신으로부터 nx1 행렬을 생성하여 반환할 수 있다.
         System.out.println("no.30 | n-차원 벡터 객체는 자신으로부터 nx1 행렬을 생성하여 반환할 수 있다.");
@@ -337,7 +337,7 @@ public class Test {
         matrix2 = Factory.createMatrix(3, 1, "2.0");
         System.out.println(indent + "matrix1 =\n" + matrix1);
         System.out.println(indent + "matrix2 =\n" + matrix2);
-        System.out.println(indent + "(concat-rows) matrix1, matrix2\n" + Tensor.concatColumns(matrix1, matrix2));
+        System.out.println(indent + "(concat-rows) matrix1, matrix2\n" + Tensors.concatColumns(matrix1, matrix2));
         System.out.println();
 
         //no.33 | 행렬은 다른 행렬과 세로로 합쳐질 수 있다.
@@ -347,7 +347,7 @@ public class Test {
         matrix2 = Factory.createMatrix(1, 3, "2.0");
         System.out.println(indent + "matrix1 =\n" + matrix1);
         System.out.println(indent + "matrix2 =\n" + matrix2);
-        System.out.println(indent + "(concat-columns) matrix1, matrix2\n" + Tensor.concatRows(matrix1, matrix2));
+        System.out.println(indent + "(concat-columns) matrix1, matrix2\n" + Tensors.concatRows(matrix1, matrix2));
         System.out.println();
 
         //no.34 | 행렬은 특정 행을 벡터 형태로 추출해 줄 수 있다.

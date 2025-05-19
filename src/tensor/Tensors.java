@@ -1,10 +1,6 @@
 package tensor;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-public class Tensor {
+public class Tensors {
 
     //no.24 전달받은 두 스칼라의 덧셈
     public static Scalar add(Scalar a, Scalar b) {

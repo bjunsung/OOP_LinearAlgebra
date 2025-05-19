@@ -10,8 +10,8 @@ class VectorImpl implements Vector{
     List<Scalar> elements;
 
     private void checkIndex(int idx){
-        if (idx < 0 || idx >= this.getSize())
-            throw new TensorInvalidIndexException("index out of bounds. dimension of this vector : " + this.getSize() + ", input index : " + idx);
+        if (idx < 0 || idx >= this.getVectorSize())
+            throw new TensorInvalidIndexException("index out of bounds. dimension of this vector : " + this.getVectorSize() + ", input index : " + idx);
     }
     VectorImpl(){
         elements = new ArrayList<>();
@@ -48,7 +48,7 @@ class VectorImpl implements Vector{
         }
     }
 
-    public Scalar getElement(int index){
+    public Scalar getVectorElement(int index){
         checkIndex(index);
         return elements.get(index);
     }
@@ -58,7 +58,7 @@ class VectorImpl implements Vector{
         elements.set(index, value);
     }
 
-    public int getSize(){
+    public int getVectorSize(){
         return elements.size();
     }
 
@@ -66,8 +66,8 @@ class VectorImpl implements Vector{
     public Vector clone() {
         try {
             VectorImpl cloned = (VectorImpl) super.clone();
-            for (int i = 0 ; i < this.getSize(); ++i) {
-                cloned.setElement(i, this.getElement(i).clone());
+            for (int i = 0 ; i < this.getVectorSize(); ++i) {
+                cloned.setElement(i, this.getVectorElement(i).clone());
             }
             return cloned;
         }catch(CloneNotSupportedException e){
@@ -80,26 +80,26 @@ class VectorImpl implements Vector{
         if (super.equals(obj)) return true;
         if ( obj == null || this.getClass() != obj.getClass()) return false;
         VectorImpl other = (VectorImpl) obj;
-        if (this.getSize() != other.getSize()) return false;
-        for (int i = 0; i < this.getSize(); ++i){
-            if (!this.getElement(i).equals(other.getElement(i))) return false;
+        if (this.getVectorSize() != other.getVectorSize()) return false;
+        for (int i = 0; i < this.getVectorSize(); ++i){
+            if (!this.getVectorElement(i).equals(other.getVectorElement(i))) return false;
         }
         return true;
     }
 
     public void add(Vector other){
-        if (this.getSize() != other.getSize())
+        if (this.getVectorSize() != other.getVectorSize())
             throw new TensorSizeMismatchException("can not operate vector addition : size is different");
-        for (int i = 0; i < this.getSize(); ++i){
-            this.getElement(i).add(other.getElement(i));
+        for (int i = 0; i < this.getVectorSize(); ++i){
+            this.getVectorElement(i).add(other.getVectorElement(i));
         }
     }
 
     public void multiply(Scalar other){
         ScalarImpl one = new ScalarImpl("1.0");
         if (other.equals(one)) return;
-        for (int i = 0; i < this.getSize(); ++i){
-            this.getElement(i).multiply(other);
+        for (int i = 0; i < this.getVectorSize(); ++i){
+            this.getVectorElement(i).multiply(other);
         }
     }
 
@@ -127,7 +127,7 @@ class VectorImpl implements Vector{
     }
 
     public static Vector add(Vector a, Vector b){
-        if (a.getSize() != b.getSize()) {
+        if (a.getVectorSize() != b.getVectorSize()) {
             throw new TensorSizeMismatchException("Vectors have different sizes");
         }
         Vector newVector = a.clone();
@@ -144,11 +144,11 @@ class VectorImpl implements Vector{
     @Override
     public String toString(){
         String vectorLine = "";
-        for (int i = 0; i < this.getSize(); ++i) {
-            BigDecimal bigdec = new BigDecimal(this.getElement(i).getValue());
+        for (int i = 0; i < this.getVectorSize(); ++i) {
+            BigDecimal bigdec = new BigDecimal(this.getVectorElement(i).getValue());
             bigdec = bigdec.setScale(2, RoundingMode.HALF_UP);
             vectorLine = vectorLine + bigdec.toString();
-            if (i != this.getSize() - 1)
+            if (i != this.getVectorSize() - 1)
                  vectorLine = vectorLine + "   ";
         }
         return vectorLine;
