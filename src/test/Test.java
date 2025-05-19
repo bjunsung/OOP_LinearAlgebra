@@ -7,17 +7,31 @@ public class Test {
     public static void main(String[] args) {
         //no.01 | 값(String)을 지정하여 Scalar 생성할 수 있다.
         Scalar scalar1 = Factory.createScalar("3.14159265358979323846264338327950288419716939");
+        System.out.println("no.01 | 값(String\"3.141592...\")을 지정하여 Scalar 생성할 수 있다.");
+        System.out.printf(indent + "Given(3.141592...) scalar1 = %s\n", scalar1);
+        System.out.println();
+
+        try {
+            Scalar wrongScalar = Factory.createScalar("a");
+            System.out.printf(indent + "Given(a) wrongScalar = %s\n", wrongScalar);
+        }
+        catch (TensorInvalidInputException e) {
+            System.out.println(e.getMessage());
+        }
 
         //no.02 | -10.0 ~ 10.0 사이의 값을 가지는 Random Scalar 생성.
         Scalar scalar2 = Factory.createRandomScalar("-10.0", "10.0");
-        System.out.println("no.01 | 값(String\"3.141592...\")을 지정하여 Scalar 생성할 수 있다.");
-        System.out.printf(indent+"Given(3.141592...) scalar1 = %s\n", scalar1);
+        System.out.println("no.02 | -10.0 ~ 10.0 사이의 값을 가지는 Random Scalar 생성.");
+        System.out.printf(indent + "Random scalar2 = %s\n", scalar2);
         System.out.println();
 
-        //no.02 | -10.0 ~ 10.0 사이의 값을 가지는 Random Scalar 생성.
-        System.out.println("no.02 | -10.0 ~ 10.0 사이의 값을 가지는 Random Scalar 생성.");
-        System.out.printf(indent+"Random scalar2 = %s\n", scalar2);
-        System.out.println();
+        try {
+            Scalar wrongRandomScalar = Factory.createRandomScalar("10.0", "-10.0");
+            System.out.printf(indent + "Wrong Random Scalar = %s\n", wrongRandomScalar);
+        }
+        catch (TensorInvalidInputException e) {
+            System.out.println(e.getMessage());
+        }
 
         //no.03 | 지정한 하나의 값을 모든 요소의 값으로 하는 n-차원 벡터를 생성 할 수 있다.
         Vector vector = Factory.createVector(5, "3.14159265358979323846264338327950288419716939");
@@ -25,6 +39,13 @@ public class Test {
         System.out.print(indent+"Given(3.141592...) vector = ");
         System.out.println(vector);
         System.out.println();
+
+        try {
+            Vector wrongVector = Factory.createVector(-1, "1");
+        }
+        catch (TensorInvalidDimensionException e) {
+            System.out.println(e.getMessage());
+        }
 
         //no.04 | i 이상 j 미만의 무작위 값을 요소로 하는 n-차원 벡터를 생성할 수 있다.
         vector = Factory.createRandomVector(5, "-5.0", "5.0");
@@ -57,15 +78,35 @@ public class Test {
 
         //no.08 | csv 파일로부터 m x n 행렬을 생성할 수 있다.
         System.out.println("no.08 | csv 파일로부터 m x n 행렬을 생성할 수 있다.");
-        String filepath = "\\C:\\Users\\baejunsung\\Desktop\\3by3matrix.csv\\";
-        try{
+        String filepath = "src/test/3by3matrix.csv";
+        try {
+            System.out.println(indent+"1. matrix from csv file("+filepath+")");
             matrix = Factory.createMatrixFromCsv(filepath);
-            System.out.println(indent+"matrix from csv file("+filepath+")");
             System.out.println(matrix);
         }
-        catch(TensorInvalidInputException e){}
-        catch(IndexOutOfBoundsException e){System.out.println("\n"+e.getMessage());}
-        catch(NumberFormatException e){System.out.println(e.getMessage());}
+        catch(TensorInvalidInputException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println();
+        try {
+            filepath = "src/test/3by3matrix_InvalidValue.csv";
+            System.out.println(indent+"2. matrix from csv file("+filepath+")");
+            matrix = Factory.createMatrixFromCsv(filepath);
+            System.out.println(matrix);
+        }
+        catch(TensorInvalidInputException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println();
+        try {
+            filepath = "src/test/3by3matrix_InvalidRange.csv";
+            System.out.println(indent+"3. matrix from csv file("+filepath+")");
+            matrix = Factory.createMatrixFromCsv(filepath);
+            System.out.println(matrix);
+        }
+        catch(TensorInvalidInputException e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println();
 
         //no.09 | 2차원 배열로부터 mxn 행렬을 생성할 수 있다.
@@ -76,6 +117,14 @@ public class Test {
         System.out.println(matrix);
         System.out.println();
 
+        // 직사각형이 아닐때 예외처리
+        try {
+            String[][] wrongArray2d = {{"1", "2"}, {"1"}};
+            matrix = Factory.createMatrixFromArray(array2d);
+        } catch (TensorInvalidInputException e) {
+            System.out.println(e.getMessage());
+        }
+
         //no.10 | 단위행렬을 생성할 수 있다.
         System.out.println("no.10 | 단위행렬을 생성할 수 있다.");
         matrix = Factory.createIdentityMatrix(3);
@@ -83,22 +132,50 @@ public class Test {
         System.out.println(matrix);
         System.out.println();
 
+        //음수일 때 오류처리
+        try {
+            Matrix wrongMatrix = Factory.createIdentityMatrix(-1);
+        } catch (TensorInvalidDimensionException e) {
+            System.out.println(e.getMessage());
+        }
+
         //no.11v | 특정 위치의 요소를 지정/조회할 수 있다.
         System.out.println("no.11v | 특정 위치의 요소를 지정/조회할 수 있다. (벡터)");
-        vector = Factory.createRandomVector(5, "-5.0", "5.0");
-        System.out.println(indent+"String value of 2nd element of 5-dimension Random vector = " + vector.getVectorElement(2));
+        String[] inc = {"1", "2", "3", "4", "5"};
+        vector = Factory.createVectorFromArray(inc);
+        vector.setElement(4, Factory.createScalar("1"));
+        System.out.println(indent+"String value of 2nd element of 5-dimension Random vector = " + vector.getVectorElement(1));
         System.out.println();
+
+        //inc 범위 외의 get 예외처리
+        try {
+            System.out.println(indent+"String value of 6nd element of 5-dimension Random vector = " + vector.getVectorElement(5));
+        }
+        catch (TensorInvalidIndexException e) {
+            System.out.println(e.getMessage());
+        }
 
         //no.11m | 특정 위치의 요소를 지정/조회할 수 있다.
         System.out.println("no.11m | 특정 위치의 요소를 지정/조회할 수 있다. (행렬)");
-        matrix = Factory.createRandomMatrix(2, 2, "-5.0", "5.0");
+        String[][] inc2d = {{"1", "2", "3"}, {"4", "5", "6"}};
+        matrix = Factory.createMatrixFromArray(inc2d);
+        matrix.setMatrixElement(0, 0, Factory.createScalar("2"));
         System.out.println(indent+"String value of (0, 1) element of 2x2 dimension random value matrix : " + matrix.getMatrixElement(0, 1));
         System.out.println();
+
+        //inc 범위 외의 get 예외처리
+        try {
+            System.out.println(indent+"String value of (2, 1) element of 2x2 dimension random value matrix : " + matrix.getMatrixElement(2, 1));
+        }
+        catch (TensorInvalidIndexException e) {
+            System.out.println(e.getMessage());
+        }
 
         //no.12 | Scalar 값을 지정/조회 할 수 있다.
         System.out.println("no.12 | Scalar 값을 지정/조회 할 수 있다.");
         Scalar scalar = Factory.createScalar("10.0");
-        System.out.printf(indent+"getValue of Scalar type, String value of scalar = %s\n", scalar);
+        scalar.setValue("5");
+        System.out.printf(indent+"getValue of Scalar type, String value of scalar = %s\n", scalar.getValue());
         System.out.println();
 
         //no.13v | 벡터의 크기 정보를 조회할 수 있다.
@@ -135,12 +212,14 @@ public class Test {
 
         //no.15s | 객체의 동등성 판단을 할 수 있다. (스칼라)
         System.out.println("no.15s | 객체의 동등성 판단을 할 수 있다. (스칼라)");
+        scalar1 = Factory.createScalar("1");
+        scalar2 = Factory.createScalar("2");
         System.out.printf(indent+"scalar1(%.2f) equal to scalar2(%.2f) : %b\n",
-                Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar2.getValue()), scalar1.equals(scalar2));
+                scalar1.getValue(), scalar2.getValue(), scalar1.equals(scalar2));
         Scalar scalar3 = Factory.createScalar(scalar1.getValue());
-        System.out.printf(indent+"scalar3 = %.2f\n", Double.parseDouble(scalar3.getValue()));
+        System.out.printf(indent+"scalar3 = %.2f\n", scalar3.getValue());
         System.out.printf(indent+"-> scalar1(%.2f) equal to scalar3(%.2f) : %b\n",
-                Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar3.getValue()), scalar1.equals(scalar3));
+                scalar1.getValue(), scalar3.getValue(), scalar1.equals(scalar3));
         System.out.println();
 
         //no.15v | 객체의 동등성 판단을 할 수 있다. (벡터)
@@ -202,21 +281,25 @@ public class Test {
 
 
         //no.18 | 스칼라는 다른 스칼라와 덧셈이 가능하다.
+        scalar1 = Factory.createScalar("1");
+        scalar2 = Factory.createScalar("2");
         scalar1.add(scalar2);
         System.out.println("no.18 | 스칼라는 다른 스칼라와 덧셈이 가능하다.");
-        System.out.printf(indent+"add scalar2 to scalar1, scalr1 value : %.2f\n", Double.parseDouble(scalar1.getValue()));
+        System.out.printf(indent + "add scalar2 to scalar1, scalar1 value : %.2f\n", scalar1);
         System.out.println();
 
         //no.19 | 스칼라는 다른 스칼라와 곱셈이 가능하다.
+        scalar1 = Factory.createScalar("3");
+        scalar2 = Factory.createScalar("2");
         scalar1.multiply(scalar2);
         System.out.println("no.19 | 스칼라는 다른 스칼라와 곱셈이 가능하다.");
-        System.out.printf(indent+"multiply scalar2 to scalar1, scalar1 value : %.2f\n", Double.parseDouble(scalar1.getValue()));
+        System.out.printf(indent + "multiply scalar2 to scalar1, scalar1 value : %.2f\n", scalar1);
         System.out.println();
 
         //no.20 | 벡터는 다른 벡터와 덧셈이 가능하다.
         System.out.println("no.20 | 벡터는 다른 벡터와 덧셈이 가능하다.");
-        vector1 = Factory.createRandomVector(5, "-5.0", "5.0");
-        vector2 = Factory.createRandomVector(5, "-5.0", "5.0");
+        vector1 = Factory.createVectorFromArray(inc);
+        vector2 = Factory.createVector(5, "1.0");
         vector1.add(vector2);
         System.out.print(indent+"add vector2 to vector1, vector1 = ");
         System.out.println(vector1);
@@ -227,7 +310,7 @@ public class Test {
         Scalar weight = Factory.createScalar("-1.0");
         vector = Factory.createVector(5, "10.0");
         vector.multiply(weight);
-        System.out.printf(indent+"multiply scalar(%.2f) to vector1, vector1 = ", Double.parseDouble(weight.getValue()));
+        System.out.printf(indent+"multiply scalar(%.2f) to vector1, vector1 = ", weight);
         System.out.println(vector);
         System.out.println();
 
@@ -241,6 +324,16 @@ public class Test {
         System.out.println(indent + "add matrix2 to matrix1\n" + matrix1);
         System.out.println();
 
+        // 덧셈 연산시 행렬 크기 다를 떄 예외처리
+        try {
+            Matrix testMatrix1 = Factory.createMatrix(3, 2, "-1.0");
+            Matrix testMatrix2 = Factory.createIdentityMatrix(2);
+            testMatrix1.add(testMatrix2);
+        }
+        catch (TensorSizeMismatchException e) {
+            System.out.println(e.getMessage());
+        }
+
         //no.23 | 행렬은 다른 행렬과 곱셈이 가능하다. (mxn)x(nxl)
         System.out.println("no.23 | 행렬은 다른 행렬과 곱셈이 가능하다. (mxn)x(nxl)");
         matrix1 = Factory.createRandomMatrix(2, 4, "-5.0", "5.0");
@@ -248,21 +341,44 @@ public class Test {
         System.out.println(indent + "matrix1 =\n" + matrix1);
         System.out.println(indent + "matrix2 =\n" + matrix2);
         System.out.println(indent + "multiply matrix2 to matrix1 (matrix1 x matrix2)");
+        matrix1.multiply(matrix2);
+        System.out.println(indent + "matrix1 =\n" + matrix1);
+        System.out.println(indent + "matrix2 =\n" + matrix2);
+        System.out.println();
+
+        // Right
+        matrix1 = Factory.createRandomMatrix(2, 4, "-5.0", "5.0");
+        matrix2 = Factory.createRandomMatrix(4, 2, "-5.0", "5.0");
+        System.out.println(indent + "matrix1 =\n" + matrix1);
+        System.out.println(indent + "matrix2 =\n" + matrix2);
+        System.out.println(indent + "multiply matrix2 to matrix1 (matrix1 x matrix2)");
         matrix1.multiplyRight(matrix2);
         System.out.println(indent + "matrix1 =\n" + matrix1);
+        System.out.println(indent + "matrix2 =\n" + matrix2);
         System.out.println();
+
+        //행렬 곱셈 연산시 행과 열의 크기 다를때 예외처리
+        try {
+            Matrix testMatrix1 = Factory.createRandomMatrix(2, 4, "-5.0", "5.0");
+            Matrix testMatrix2 = Factory.createRandomMatrix(5, 2, "-5.0", "5.0");
+            testMatrix1.multiply(testMatrix2);
+        } catch (MatrixMulMismatchException e) {
+            System.out.println(e.getMessage());
+        }
 
         //no.24 | 전달받은 두 스칼라의 덧셈이 가능하다.
         System.out.println("no.24 | 전달받은 두 스칼라의 덧셈이 가능하다.");
-        System.out.printf("(static method) add operation of two given scalars : scalar1(%.2f) + scalar2(%.2f) : %.2f\n",
-                Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar2.getValue()), Double.parseDouble(Tensors.add(scalar1, scalar2).getValue()));
+        System.out.printf("(static method) add operation of two given scalars : scalar1(%s) + scalar2(%s) : %s\n",
+                scalar1, scalar2, Tensors.add(scalar1, scalar2));
         System.out.println();
 
         //no.25 | 전달받은 두 스칼라의 곱셈이 가능하다.
         System.out.println("no.25 | 전달받은 두 스칼라의 곱셈이 가능하다.");
-        System.out.printf("(static method) multiply operation of two given scalars : scalar1(%.2f) x scalar2(%.2f) : %.2f\n",
-                Double.parseDouble(scalar1.getValue()), Double.parseDouble(scalar2.getValue()), Double.parseDouble(Tensors.multiply(scalar1, scalar2).getValue()));
+        System.out.printf("(static method) multiply operation of two given scalars : scalar1(%s) x scalar2(%s) : %s\n",
+                scalar1, scalar2, Tensors.multiply(scalar1, scalar2));
         System.out.println();
+
+        // TODO
 
         //no.26 | 전달받은 두 벡터의 덧셈이 가능하다.
         System.out.println("no.26 | 전달받은 두 벡터의 덧셈이 가능하다.");

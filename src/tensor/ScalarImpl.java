@@ -19,6 +19,15 @@ class ScalarImpl implements Scalar{
 
     }
 
+    public ScalarImpl(String min, String max) {
+        BigDecimal minVal = new BigDecimal(min);
+        BigDecimal maxVal = new BigDecimal(max);
+        if (minVal.subtract(maxVal).compareTo(new BigDecimal("0.0")) >= 0)
+            throw new TensorInvalidInputException("Minimum value must be less than or equal to Maximum value : min = " + min + ", max = " + max);
+        BigDecimal randomVal = minVal.add(new BigDecimal(Math.random()).multiply(maxVal.subtract(minVal)));
+        this.value = randomVal;
+    }
+
     public String getValue(){
         return value.toString();
     }

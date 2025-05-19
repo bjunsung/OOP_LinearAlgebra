@@ -79,12 +79,17 @@ class MatrixImpl implements Matrix {
                 }
                 elements.add(row);
             }
+            for (int i = 0; i < this.getMatrixRowCount(); ++i)
+                if(this.elements.get(i).size() != this.getMatrixRowCount())
+                    throw new TensorInvalidInputException("Matrix size error");
         } catch (FileNotFoundException e) {
             System.out.println(" file not found - " + filepath);
             throw new TensorInvalidInputException("none CSV file in" + filepath);
         } catch (IOException e) {
             System.out.println("FAIL to read CSV file");
             throw new TensorInvalidInputException("Error ");
+        } catch(IndexOutOfBoundsException e) {
+            System.out.println(e.getMessage());
         }
     }
 
