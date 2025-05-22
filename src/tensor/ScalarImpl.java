@@ -53,10 +53,15 @@ class ScalarImpl implements Scalar{
     }
 
     public boolean equals(Object obj){
-        if ( super.equals(obj) ) return true;
-        if ( obj == null || getClass() != obj.getClass()) return false;
-        ScalarImpl other = (ScalarImpl) obj;
-        return this.value.equals(other.value);
+//        if ( super.equals(obj) ) return true;
+//        if ( obj == null || getClass() != obj.getClass()) return false;
+//        ScalarImpl other = (ScalarImpl) obj;
+//        return this.value.equals(other.value);
+        if (obj instanceof Scalar s) {
+            return compareTo(s) == 0;
+        } else {
+            return false;
+        }
     }
 
     public void add(Scalar other){

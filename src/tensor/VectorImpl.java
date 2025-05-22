@@ -53,7 +53,7 @@ class VectorImpl implements Vector{
         return elements.get(index);
     }
 
-    public void setElement(int index, Scalar value){
+    public void setVectorElement(int index, Scalar value){
         checkIndex(index);
         elements.set(index, value);
     }
@@ -67,7 +67,7 @@ class VectorImpl implements Vector{
         try {
             VectorImpl cloned = (VectorImpl) super.clone();
             for (int i = 0 ; i < this.getVectorSize(); ++i) {
-                cloned.setElement(i, this.getVectorElement(i).clone());
+                cloned.setVectorElement(i, this.getVectorElement(i).clone());
             }
             return cloned;
         }catch(CloneNotSupportedException e){

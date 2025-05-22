@@ -3,7 +3,7 @@ package tensor;
 // Vector.java
 public interface Vector extends Cloneable {
     Scalar getVectorElement(int index);
-    void setElement(int index, Scalar value);
+    void setVectorElement(int index, Scalar value);
 
     int getVectorSize();
 

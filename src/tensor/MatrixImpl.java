@@ -215,7 +215,7 @@ class MatrixImpl implements Matrix {
 
     //no.23 행렬은 다른 행렬과 곱셈이 가능하다. (input matrix x this matrix)
     public void multiply(Matrix other) {
-        if (this.getMatrixColumnCount() != other.getMatrixRowCount()) {
+        if (other.getMatrixColumnCount() != this.getMatrixRowCount()) {
             throw new MatrixMulMismatchException("invalid matrix multiply size, can not operate"
                     + " (" + other.getMatrixRowCount() + "x" + other.getMatrixColumnCount() + ")x(" + this.getMatrixRowCount() + "x" + this.getMatrixColumnCount() + ")");
         }
@@ -224,14 +224,14 @@ class MatrixImpl implements Matrix {
             List<Scalar> row = new ArrayList<>();
             for (int j = 0; j < this.getMatrixColumnCount(); j++) {
                 Scalar scalar = new ScalarImpl("0.0");
-                for (int k = 0; k < this.getMatrixRowCount(); k++) {
+                for (int k = 0; k < other.getMatrixColumnCount(); k++) {
                     scalar.add(new BigDecimal(other.getMatrixElement(i, k).getValue()).multiply(new BigDecimal(this.getMatrixElement(k, j).getValue())));
                 }
                 row.add(scalar);
             }
             multipliedElements.add(i, row);
-            this.elements = multipliedElements;
         }
+        this.elements = multipliedElements;
     }
 
     //no.32 행렬은 다른 행렬과 가로로 합쳐질 수 있다.
@@ -484,7 +484,6 @@ class MatrixImpl implements Matrix {
                     Scalar factor = rrefMatrix.getMatrixElement(i, lead).clone();
                     factor.multiply(new ScalarImpl("-1.0"));
                     rrefMatrix.addScaledRow(i, row, factor);
-
                 }
             }
             // 4. 오차 허용
