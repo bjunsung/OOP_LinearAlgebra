@@ -141,10 +141,15 @@ public class Test {
 
         //no.11v | 특정 위치의 요소를 지정/조회할 수 있다.
         System.out.println("no.11v | 특정 위치의 요소를 지정/조회할 수 있다. (벡터)");
-        String[] inc = {"1", "2", "3", "4", "5"};
-        vector = Factory.createVectorFromArray(inc);
+        String[] input11v = {"1", "2", "3", "4", "5"};
+        String[] result11v = {"1", "2", "3", "4", "1"};
+
+        vector = Factory.createVectorFromArray(input11v);
         vector.setElement(4, Factory.createScalar("1"));
-        System.out.println(indent+"String value of 2nd element of 5-dimension Random vector = " + vector.getVectorElement(1));
+        System.out.println("[1 2 3 4 5] 의 4번째 요소 값을 1로 바꾼 값은 [1 2 3 4 1] 입니다. : "
+                + vector.equals(Factory.createVectorFromArray(result11v)));
+        System.out.println("[1 2 3 4 1] 의 2번째 요소 값은 2입니다. : "
+                + vector.getVectorElement(1).equals(Factory.createScalar("2")));
         System.out.println();
 
         //inc 범위 외의 get 예외처리
@@ -157,9 +162,12 @@ public class Test {
 
         //no.11m | 특정 위치의 요소를 지정/조회할 수 있다.
         System.out.println("no.11m | 특정 위치의 요소를 지정/조회할 수 있다. (행렬)");
-        String[][] inc2d = {{"1", "2", "3"}, {"4", "5", "6"}};
-        matrix = Factory.createMatrixFromArray(inc2d);
+        String[][] input11m = {{"1", "2", "3"}, {"4", "5", "6"}};
+        String[][] result11m = {{"2", "2", "3"}, {"4","5","6"}};
+        matrix = Factory.createMatrixFromArray(input11m);
         matrix.setMatrixElement(0, 0, Factory.createScalar("2"));
+        System.out.println("[[1 2 3] [4 5 6]] 의 (1, 1) 값을 바꾼 행렬은 [[2 2 3] [4 5 6]] 입니다. : "
+                + matrix.equals(Factory.createMatrixFromArray(result11m)));
         System.out.println(indent+"String value of (0, 1) element of 2x2 dimension random value matrix : " + matrix.getMatrixElement(0, 1));
         System.out.println();
 
@@ -214,12 +222,12 @@ public class Test {
         System.out.println("no.15s | 객체의 동등성 판단을 할 수 있다. (스칼라)");
         scalar1 = Factory.createScalar("1");
         scalar2 = Factory.createScalar("2");
-        System.out.printf(indent+"scalar1(%.2f) equal to scalar2(%.2f) : %b\n",
-                scalar1.getValue(), scalar2.getValue(), scalar1.equals(scalar2));
+        System.out.printf(indent+"scalar1(%s) equal to scalar2(%s) : %b\n",
+                scalar1, scalar2 , scalar1.equals(scalar2));
         Scalar scalar3 = Factory.createScalar(scalar1.getValue());
-        System.out.printf(indent+"scalar3 = %.2f\n", scalar3.getValue());
-        System.out.printf(indent+"-> scalar1(%.2f) equal to scalar3(%.2f) : %b\n",
-                scalar1.getValue(), scalar3.getValue(), scalar1.equals(scalar3));
+        System.out.printf(indent+"scalar3 = %s\n", scalar3.getValue());
+        System.out.printf(indent+"-> scalar1(%s) equal to scalar3(%s) : %b\n",
+                scalar1, scalar3, scalar1.equals(scalar3));
         System.out.println();
 
         //no.15v | 객체의 동등성 판단을 할 수 있다. (벡터)
@@ -285,7 +293,7 @@ public class Test {
         scalar2 = Factory.createScalar("2");
         scalar1.add(scalar2);
         System.out.println("no.18 | 스칼라는 다른 스칼라와 덧셈이 가능하다.");
-        System.out.printf(indent + "add scalar2 to scalar1, scalar1 value : %.2f\n", scalar1);
+        System.out.printf(indent + "add scalar2 to scalar1, scalar1 value : %s\n", scalar1);
         System.out.println();
 
         //no.19 | 스칼라는 다른 스칼라와 곱셈이 가능하다.
@@ -293,12 +301,12 @@ public class Test {
         scalar2 = Factory.createScalar("2");
         scalar1.multiply(scalar2);
         System.out.println("no.19 | 스칼라는 다른 스칼라와 곱셈이 가능하다.");
-        System.out.printf(indent + "multiply scalar2 to scalar1, scalar1 value : %.2f\n", scalar1);
+        System.out.printf(indent + "multiply scalar2 to scalar1, scalar1 value : %s\n", scalar1);
         System.out.println();
 
         //no.20 | 벡터는 다른 벡터와 덧셈이 가능하다.
         System.out.println("no.20 | 벡터는 다른 벡터와 덧셈이 가능하다.");
-        vector1 = Factory.createVectorFromArray(inc);
+        vector1 = Factory.createVector(5, "-1.0");
         vector2 = Factory.createVector(5, "1.0");
         vector1.add(vector2);
         System.out.print(indent+"add vector2 to vector1, vector1 = ");
@@ -310,7 +318,7 @@ public class Test {
         Scalar weight = Factory.createScalar("-1.0");
         vector = Factory.createVector(5, "10.0");
         vector.multiply(weight);
-        System.out.printf(indent+"multiply scalar(%.2f) to vector1, vector1 = ", weight);
+        System.out.printf(indent+"multiply scalar(%s) to vector1, vector1 = ", weight);
         System.out.println(vector);
         System.out.println();
 
@@ -341,7 +349,7 @@ public class Test {
         System.out.println(indent + "matrix1 =\n" + matrix1);
         System.out.println(indent + "matrix2 =\n" + matrix2);
         System.out.println(indent + "multiply matrix2 to matrix1 (matrix1 x matrix2)");
-        matrix1.multiply(matrix2);
+        matrix2.multiply(matrix1);
         System.out.println(indent + "matrix1 =\n" + matrix1);
         System.out.println(indent + "matrix2 =\n" + matrix2);
         System.out.println();
@@ -365,6 +373,7 @@ public class Test {
         } catch (MatrixMulMismatchException e) {
             System.out.println(e.getMessage());
         }
+        System.out.println();
 
         //no.24 | 전달받은 두 스칼라의 덧셈이 가능하다.
         System.out.println("no.24 | 전달받은 두 스칼라의 덧셈이 가능하다.");
@@ -377,8 +386,6 @@ public class Test {
         System.out.printf("(static method) multiply operation of two given scalars : scalar1(%s) x scalar2(%s) : %s\n",
                 scalar1, scalar2, Tensors.multiply(scalar1, scalar2));
         System.out.println();
-
-        // TODO
 
         //no.26 | 전달받은 두 벡터의 덧셈이 가능하다.
         System.out.println("no.26 | 전달받은 두 벡터의 덧셈이 가능하다.");
@@ -403,7 +410,6 @@ public class Test {
         System.out.println(indent + "multiply scalar to vector");
         System.out.println(indent + "scalar x vector = \t" + Tensors.multiply(scalar, vector));
         System.out.println();
-
 
         //no.28 | 전달받은 같은 크기의 두 행렬 덧셈이 가능하다.
         System.out.println("no.28 | 전달받은 같은 크기의 두 행렬 덧셈이 가능하다.");
@@ -696,13 +702,13 @@ public class Test {
         System.out.println(indent + "matrix1 =\n" + matrix1);
         try{
         System.out.println(indent + "inverse matrix of matrix1 =\n" + matrix1.inverse());
-        }catch(NonSquareMatrixException | TensorArithmeticException e){
+        }catch(MatrixNonSquareException | TensorArithmeticException e){
             System.out.println(e.getMessage());
         }
         System.out.println(indent + "matrix2 =\n" + matrix2);
         try{
             System.out.println(indent + "inverse matrix of matrix2 =\n" + matrix2.inverse());
-        }catch(NonSquareMatrixException | TensorArithmeticException e){
+        }catch(MatrixNonSquareException | TensorArithmeticException e){
             System.out.println(e.getMessage());
         }
 

@@ -24,7 +24,7 @@ class MatrixImpl implements Matrix {
 
     private void checkIndices(int row, int col){
         checkRowIndex(row);
-        checkColumnIndex(col);;
+        checkColumnIndex(col);
     }
 
     MatrixImpl() {
@@ -113,7 +113,7 @@ class MatrixImpl implements Matrix {
     //단위행렬 생성
     MatrixImpl(int size) {
         if (size < 0)
-            throw new TensorInvalidInputException("row/column dimension must bigger than or equal to zero");
+            throw new TensorInvalidDimensionException("row/column dimension must bigger than or equal to zero");
         elements = new ArrayList<>();
         for (int i = 0; i < size; ++i) {
             List<Scalar> row = new ArrayList<>();
@@ -215,8 +215,8 @@ class MatrixImpl implements Matrix {
 
     //no.23 행렬은 다른 행렬과 곱셈이 가능하다. (input matrix x this matrix)
     public void multiply(Matrix other) {
-        if (other.getMatrixColumnCount() != this.getMatrixRowCount()) {
-            throw new TensorInvalidInputException("invalid matrix multiply size, can not operate"
+        if (this.getMatrixColumnCount() != other.getMatrixRowCount()) {
+            throw new MatrixMulMismatchException("invalid matrix multiply size, can not operate"
                     + " (" + other.getMatrixRowCount() + "x" + other.getMatrixColumnCount() + ")x(" + this.getMatrixRowCount() + "x" + this.getMatrixColumnCount() + ")");
         }
         List<List<Scalar>> multipliedElements = new ArrayList<>();
@@ -326,7 +326,7 @@ class MatrixImpl implements Matrix {
     //no.39 행렬은 대각 요소의 합을 구해줄 수 있다.
     public Scalar trace() {
         if (this.getMatrixRowCount() != this.getMatrixColumnCount())
-            throw new NonSquareMatrixException("Non square matrix: " + this.getMatrixRowCount() + "x" + this.getMatrixColumnCount());
+            throw new MatrixNonSquareException("Non square matrix: " + this.getMatrixRowCount() + "x" + this.getMatrixColumnCount());
         ScalarImpl traceSum = new ScalarImpl("0.0");
         for (int i = 0; i < this.getMatrixRowCount(); ++i)
             traceSum.add(this.getMatrixElement(i, i)); //Scalar add연산, clone() 필요 없음
@@ -549,7 +549,7 @@ class MatrixImpl implements Matrix {
     //no.53. 행렬은 자신의 행렬식을 구해줄 수 있다.
     public Scalar determinant() {
         if (!this.isSquare()) {
-            throw new NonSquareMatrixException("Determinant is only defined for square matrices.");
+            throw new MatrixNonSquareException("Determinant is only defined for square matrices.");
         }
         int size = this.getMatrixRowCount();
         if (size == 1) {
@@ -584,7 +584,7 @@ class MatrixImpl implements Matrix {
     //no.54. 행렬은 자신의 역행렬을 구해줄 수 있다.
     public Matrix inverse() {
         if (!this.isSquare())
-            throw new NonSquareMatrixException("Non-square matrix does not have an inverse.");
+            throw new MatrixNonSquareException("Non-square matrix does not have an inverse.");
         MatrixImpl rrefMatrix = (MatrixImpl) this.clone();
         int size = rrefMatrix.getMatrixRowCount();
         MatrixImpl inverseMatrix = new MatrixImpl(size); // 단위행렬 생성
