@@ -234,7 +234,39 @@ class MatrixImpl implements Matrix {
         this.elements = multipliedElements;
     }
 
-    //no.32 행렬은 다른 행렬과 가로로 합쳐질 수 있다.
+    //no.28 전달받은 두 행렬의 덧셈
+    public static Matrix add(Matrix a, Matrix b) {
+        if(a.getMatrixRowCount() != b.getMatrixRowCount() || a.getMatrixColumnCount() != b.getMatrixColumnCount()){
+            throw new TensorInvalidInputException("invalid matrix size");
+        }
+        Matrix newMatrix = a.clone();
+        for(int i = 0; i < newMatrix.getMatrixRowCount(); ++i){
+            for(int j = 0; j < newMatrix.getMatrixColumnCount(); ++j){
+                newMatrix.getMatrixElement(i,j).add(b.getMatrixElement(i,j));
+            }
+        }
+        return newMatrix;
+    }
+
+    //no.29 전달받은 두 행렬의 곱셈
+    public static Matrix multiply(Matrix a, Matrix b) {
+        if (a.getMatrixColumnCount() != b.getMatrixRowCount()){
+            throw new TensorInvalidInputException("invalid matrix multiply size"
+                    + "(" + a.getMatrixRowCount() + "x" + a.getMatrixColumnCount() + ")x(" + b.getMatrixRowCount() + "x" + b.getMatrixColumnCount() + ")");
+        }
+        Matrix newMatrix = a.clone();
+        newMatrix.multiplyRight(b);
+        return newMatrix;
+    }
+
+    //no.32 전달받은 두 행렬의 가로 합(concat columns) static
+    public static Matrix concatColumns(Matrix a, Matrix b) {
+        Matrix concated = a.clone();
+        concated.concatColumns(b);
+        return concated;
+    }
+
+    //no.32 전달받은 두 행렬의 가로 합(concat columns) non-static
     public void concatColumns(Matrix other) {
         if (this.getMatrixRowCount() != other.getMatrixRowCount())
             throw new TensorSizeMismatchException("matrix row size is different. a: " + this.getMatrixRowCount() + " b: " + other.getMatrixRowCount());
@@ -245,7 +277,15 @@ class MatrixImpl implements Matrix {
         }
     }
 
-    //no.33 행렬은 다른 행렬과 세로로 합쳐질 수 있다.
+    //no.33 전달받은 두 행렬의 세로 합(concat rows) static
+    public static Matrix concatRows(Matrix a, Matrix b) {
+        Matrix concated = a.clone();
+        concated.concatRows(b);
+        return concated;
+    }
+
+
+    //no.33 전달받은 두 행렬의 세로 합(concat rows) non-static
     public void concatRows(Matrix other) {
         if (this.getMatrixColumnCount() != other.getMatrixColumnCount())
             throw new TensorSizeMismatchException("matrix column size is different. a: " + this.getMatrixColumnCount() + " b: " + other.getMatrixColumnCount());
@@ -636,44 +676,6 @@ class MatrixImpl implements Matrix {
         return inverseMatrix;
     }
 
-    //no.28 전달받은 두 행렬의 덧셈
-    public static Matrix add(Matrix a, Matrix b) {
-        if(a.getMatrixRowCount() != b.getMatrixRowCount() || a.getMatrixColumnCount() != b.getMatrixColumnCount()){
-            throw new TensorInvalidInputException("invalid matrix size");
-        }
-        Matrix newMatrix = a.clone();
-        for(int i = 0; i < newMatrix.getMatrixRowCount(); ++i){
-            for(int j = 0; j < newMatrix.getMatrixColumnCount(); ++j){
-                newMatrix.getMatrixElement(i,j).add(b.getMatrixElement(i,j));
-            }
-        }
-        return newMatrix;
-    }
-
-    //no.29 전달받은 두 행렬의 곱셈
-    public static Matrix multiply(Matrix a, Matrix b) {
-        if (a.getMatrixColumnCount() != b.getMatrixRowCount()){
-            throw new TensorInvalidInputException("invalid matrix multiply size"
-                    + "(" + a.getMatrixRowCount() + "x" + a.getMatrixColumnCount() + ")x(" + b.getMatrixRowCount() + "x" + b.getMatrixColumnCount() + ")");
-        }
-        Matrix newMatrix = a.clone();
-        newMatrix.multiplyRight(b);
-        return newMatrix;
-    }
-
-    //no.32 전달받은 두 행렬의 가로 합(concat columns)
-    public static Matrix concatColumns(Matrix a, Matrix b) {
-        Matrix concated = a.clone();
-        concated.concatColumns(b);
-        return concated;
-    }
-
-    //no.33 전달받은 두 행렬의 세로 합(concat rows)
-    public static Matrix concatRows(Matrix a, Matrix b) {
-        Matrix concated = a.clone();
-        concated.concatRows(b);
-        return concated;
-    }
 
     @Override
     public String toString(){
